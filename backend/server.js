@@ -8,11 +8,36 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://examora-ai.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
+  })
+);
+
+app.options("*", cors());
+
+app.use(express.json({ limit: "10mb" }));
 
 app.get("/", (req, res) => {
   res.status(200).send("Examora AI backend is running");
+});
+
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
 });
 
 app.use("/api/ai", aiRoutes);
