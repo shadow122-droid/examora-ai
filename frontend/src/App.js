@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 function App() {
   const [username, setUsername] = useState("");
   const [savedUsers, setSavedUsers] = useState([]);
@@ -164,7 +166,7 @@ function App() {
   const pollJobStatus = (jobId, chatIndex) => {
     const interval = setInterval(async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/pdf/status/${jobId}`);
+        const res = await axios.get(`${API_URL}/api/pdf/status/${jobId}`);
         const job = res.data;
 
         setProgressInfo({
@@ -230,7 +232,7 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/ask", {
+      const res = await axios.post(`${API_URL}/api/ai/ask`, {
         question: currentQuestion,
       });
 
@@ -264,10 +266,7 @@ function App() {
     });
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/pdf/upload",
-        formData
-      );
+      const res = await axios.post(`${API_URL}/api/pdf/upload`, formData);
 
       pollJobStatus(res.data.jobId, chatIndex);
     } catch (error) {
@@ -293,10 +292,7 @@ function App() {
     });
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/pdf/questions",
-        formData
-      );
+      const res = await axios.post(`${API_URL}/api/pdf/questions`, formData);
 
       pollJobStatus(res.data.jobId, chatIndex);
     } catch (error) {

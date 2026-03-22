@@ -18,8 +18,6 @@ const groq = new Groq({
 });
 
 const MODEL = "llama-3.3-70b-versatile";
-
-// In-memory job store (good for local project)
 const jobs = {};
 
 function chunkText(text, chunkSize = 5000) {
@@ -65,7 +63,7 @@ router.post("/upload", upload.single("pdf"), async (req, res) => {
       currentPart: 0,
       totalParts: chunks.length,
       progress: 0,
-      message: `Starting analysis...`,
+      message: "Starting analysis...",
       result: null,
       type: "explain",
     };
@@ -75,7 +73,6 @@ router.post("/upload", upload.single("pdf"), async (req, res) => {
       totalParts: chunks.length,
     });
 
-    // Background processing
     (async () => {
       try {
         const chunkExplanations = [];
@@ -160,7 +157,7 @@ router.post("/questions", upload.single("pdf"), async (req, res) => {
       currentPart: 0,
       totalParts: chunks.length,
       progress: 0,
-      message: `Starting question generation...`,
+      message: "Starting question generation...",
       result: null,
       type: "questions",
     };
@@ -170,7 +167,6 @@ router.post("/questions", upload.single("pdf"), async (req, res) => {
       totalParts: chunks.length,
     });
 
-    // Background processing
     (async () => {
       try {
         const chunkQuestions = [];
