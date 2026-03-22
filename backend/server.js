@@ -11,11 +11,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.status(200).send("Examora AI backend is running");
+});
+
 app.use("/api/ai", aiRoutes);
 app.use("/api/pdf", pdfRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 10000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("process.env.PORT =", process.env.PORT);
   console.log(`Server running on port ${PORT}`);
 });
